@@ -13,7 +13,9 @@ const createContact = async (req, res) => {
         }
 
         const oldMobile = await Contact.find({ mobile });
-        if (oldMobile) {
+        const k = `${oldMobile}`;
+
+        if (k.length > 0) {
             return res.send(error(404, "User with this Mobile Already Exists"));
         }
         const user = await Contact.create({
@@ -45,6 +47,17 @@ const updateContact = async (req, res) => {
         }
 
         const { name, mobile, email } = req.body;
+        const oldMobile = await Contact.find({ mobile });
+        const k = `${oldMobile}`;
+
+        if (k.length > 0 && oldMobile !== mobile) {
+            return res.send(error(404, "User with this Mobile Already Exists"));
+        }
+
+        const checkLen = `${mobile}`;
+        if (checkLen.length != 10) {
+            return res.send(error(401, "Invalid Mobile Number"));
+        }
         const newContact = {
             name,
             mobile,
