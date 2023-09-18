@@ -46,8 +46,9 @@ const updateContact = async (req, res) => {
         }
 
         const { name, mobile, email } = req.body;
-        const existingContact = await Contact.find({ mobile });
-        if (existingContact[0].mobile !== contact.mobile) {
+        const existingContact = await Contact.findOne({ mobile });
+
+        if (existingContact != null && existingContact.mobile !== contact.mobile) {
             return res.send(error(404, "User with this Mobile Already Exists"));
         }
 
